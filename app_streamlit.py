@@ -9,7 +9,7 @@ import streamlit as st
 import pickle as pkl
 import pandas as pd
 from streamlit_card import card
-
+from sklearn.preprocessing import StandardScaler
 def predict_cluster(X_data : pd.DataFrame):
     with open("C:\src\Project\Final_Project\customer_classification_model.pkl","rb") as f:
         model = pkl.load(f)
@@ -19,6 +19,7 @@ def set_page(page):
     st.session_state.page = page
 
 def input_fields():
+    
     st.title("Customer Classification Model")
     kidhome = 0
     teenhome = 0
@@ -37,12 +38,14 @@ def input_fields():
     
     family_size = kidhome + teenhome + 2 if is_married == "Married" else kidhome + teenhome + 1
 
+    spent = st.number_input("Enter Total Spent Amount:")
+
     is_parent = 0 if is_parent == "No" else 1
 
-    data = [[is_parent,income,teenhome,kidhome,age,family_size]]
+    data = [[is_parent,income,teenhome,kidhome,age,family_size,spent]]
 
-    X_data = pd.DataFrame(data,columns=["Is_Parent","Income","Teenhome","Kidhome","Age","Family_Member_Count"])
-
+    X_data = pd.DataFrame(data,columns=["Is_Parent","Income","Teenhome","Kidhome","Age","Family_Member_Count","Spent"])
+    
     st.session_state["Input_Data"] = X_data
     st.button('Submit', on_click=set_page, args=["Display Data"])  
         
@@ -58,7 +61,11 @@ def show_result():
             }
             X_data = st.session_state["Input_Data"]
             st.write(X_data)
-                
+
+            # scaler = StandardScaler()
+            # Scaled_X_data = pd.DataFrame(scaler.fit_transform(X_data),columns = X_data.columns)
+
+            # label = predict_cluster(X_data=Scaled_X_data)
             label = predict_cluster(X_data=X_data)
             label_no = label[0].item()
             st.write(f"Cluster:{label[0]}")
