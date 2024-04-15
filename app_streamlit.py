@@ -71,7 +71,7 @@ def show_result():
             st.write(f"Cluster:{label[0]}")
             insights_new = insights[label_no]
             # with st.expander("Business Insights",expanded=True):
-            #     st.write(insights_new)
+            #     st.write(insights_new[0])
             # res = card(
             #     title="Personality Analysis",
             #     text=insights[label[0].item()],
@@ -86,9 +86,40 @@ def show_result():
             #         }
             #     }
             # )
-            col1 = st.columns(1)
-            col1[0].header("Personality Analysis")
-            col1[0].text(insights[label[0].item()])
+            # col1,col2 = st.columns(2)
+            # col1.header("Personality Analysis")
+            # col1.text(insights[label[0].item()])
+            # col2.header("Personality Analysis")
+            # col2.text(insights[label[0].item()])
+            # expander1 = st.expander("Expander 1", style="width:100%; padding:10px; border-radius:10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);")
+            # expander2 = st.expander("Expander 2", style="width:100%; padding:10px; border-radius:10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);")
+
+            # Place them side by side
+            col1, col2 = st.columns(2)
+
+            # Put expanders in the columns
+            # with col1:
+            #     with st.expander("#### Business Insights",expanded=True):
+            #         st.markdown(insights_new[0])
+            # with col2:
+            #     with st.expander("#### Future Course of Action",expanded=True):
+            #         st.markdown(insights_new[0])
+            with st.expander("""<style></style>""",expanded=True):
+                st.markdown("""
+                    <style>
+                        .headerText{
+                            color:#CC2828;
+                            font-weight:bold;
+                        }
+                    </style>
+                    <p class="headerText">Hello Insights</p>
+                """,unsafe_allow_html=True)
+            with st.expander("#### Future Course of Action",expanded=True):
+                st.markdown(insights_new[0])
+                # expander1.write("Content of Expander 1 goes here")
+
+            # with col2:
+                # expander2.write("Content of Expander 2 goes here")
         else:
             st.write("Data not received")
         
