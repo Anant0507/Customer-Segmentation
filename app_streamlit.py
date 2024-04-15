@@ -8,63 +8,86 @@
 import streamlit as st
 import pickle as pkl
 import pandas as pd
+from streamlit_card import card
 
 def predict_cluster(X_data : pd.DataFrame):
     with open("C:\src\Project\Final_Project\customer_classification_model.pkl","rb") as f:
         model = pkl.load(f)
         return model.predict(X_data)
-    
+
+def set_page(page):
+    st.session_state.page = page
+
 def input_fields():
     st.title("Customer Classification Model")
-    is_submitted = False
     kidhome = 0
     teenhome = 0
-    if not is_submitted:
-        # Define a list of fruits
-        selector = ["Select","Yes","No"]
-        maritial_status = ["Select","Married","Single"]
-        # Create a dropdown button to select a fruit
-        is_parent = st.selectbox("Are you a Parent?", selector)
-        is_married = st.selectbox("What is your maritial Status",maritial_status)
-        if is_parent == "Yes":
-            teenhome = st.number_input("Do you have any teenager?", min_value=0, max_value=5, step=1,format="%d")
-            kidhome = st.number_input("Do you have any kid?", min_value=0, max_value=5, step=1,format="%d")
+    selector = ["Select","Yes","No"]
+    maritial_status = ["Select","Married","Single"]
 
-        age = st.number_input("Enter your age", min_value=0, max_value=90, step=1,format="%d")
+    is_parent = st.selectbox("Are you a Parent?", selector)
+    is_married = st.selectbox("What is your maritial Status",maritial_status)
+    if is_parent == "Yes":
+        teenhome = st.number_input("Do you have any teenager?", min_value=0, max_value=5, step=1,format="%d")
+        kidhome = st.number_input("Do you have any kid?", min_value=0, max_value=5, step=1,format="%d")
 
-        income = st.number_input("Enter Income:")
-        if is_parent == "Yes":
-            teenhome = st.number_input("Do you have any teenager?", min_value=0, max_value=5, step=1,format="%d")
-            kidhome = st.number_input("Do you have any kid?", min_value=0, max_value=5, step=1,format="%d")
+    age = st.number_input("Enter your age", min_value=0, max_value=90, step=1,format="%d")
 
-        family_size = kidhome + teenhome + 2 if is_married == "Married" else kidhome + teenhome + 1
-
-        is_parent = 0 if is_parent == "No" else 1
-
-        data = [[is_parent,income,teenhome,kidhome,age,family_size]]
-
-        X_data = pd.DataFrame(data,columns=["Is_Parent","Income","Teenhome","Kidhome","Age","Family_Member_Count"])
+    income = st.number_input("Enter Income:")
     
-        # is_submitted = st.button("Submit")   
-        if st.button("Submit"):
-            st.session_state["Input_Data"] = X_data
-            st.session_state.page = "Display Data"  
+    family_size = kidhome + teenhome + 2 if is_married == "Married" else kidhome + teenhome + 1
+
+    is_parent = 0 if is_parent == "No" else 1
+
+    data = [[is_parent,income,teenhome,kidhome,age,family_size]]
+
+    X_data = pd.DataFrame(data,columns=["Is_Parent","Income","Teenhome","Kidhome","Age","Family_Member_Count"])
+
+    st.session_state["Input_Data"] = X_data
+    st.button('Submit', on_click=set_page, args=["Display Data"])  
+        
 
 def show_result():
         st.title("Result")
-        if "input_data" in st.session_state:
-            X_data = st.session_state["input_data"]
+        if "Input_Data" in st.session_state:
+            insights = {
+                0:["Insight 1 for Class 0","Insight 2 for class 0"],
+                1:["Insight 1 for Class 1","Insight 2 for class 1"],
+                2:["Insight 1 for Class 2","Insight 2 for class 2"],
+                3:["Insight 1 for Class 3","Insight 2 for class 3"],
+            }
+            X_data = st.session_state["Input_Data"]
             st.write(X_data)
                 
-            st.write(predict_cluster(X_data=X_data))   
+            label = predict_cluster(X_data=X_data)
+            label_no = label[0].item()
+            st.write(f"Cluster:{label[0]}")
+            insights_new = insights[label_no]
+            # with st.expander("Business Insights",expanded=True):
+            #     st.write(insights_new)
+            # res = card(
+            #     title="Personality Analysis",
+            #     text=insights[label[0].item()],
+            #     styles={
+            #         "card": {
+            #             "width": "100%",
+            #             "height": "100px",
+            #             "box-shadow": "0 0 10px rgba(0,0,0,0.5)",
+            #         },
+            #         "text": {
+            #             "font-family": "serif",
+            #         }
+            #     }
+            # )
+            col1 = st.columns(1)
+            col1[0].header("Personality Analysis")
+            col1[0].text(insights[label[0].item()])
         else:
             st.write("Data not received")
         
-        if st.button("Home Page"):
-            st.session_state.page = "Input_Data"
+        st.button('Home', on_click=set_page, args=["Input Data"])
 
 def main():
-#    if "page" n   
     if 'page' not in st.session_state:
         st.session_state.page = 'Input Data'
 
@@ -72,37 +95,5 @@ def main():
         input_fields()
     elif st.session_state.page == 'Display Data':
         show_result ()
-    
-
-
-    # # Create two columns
-    # col1, col2 = st.columns(2)
-
-    # # Add elements to the first column
-    # with col1:
-    #     st.write("This is column 1")
-
-    # # Add elements to the second column
-    # with col2:
-    #     st.write("This is column 2")
-
-    # # Create a container
-    # with st.container():
-    #     st.write("This is inside a container")
-    # a = """This is my textasdjhkjashdkjahskdj kjahds kajshdkjhk kajsdhkaj sdkjhas akjshdkajs dk jashdkja sdashgdasgd hagsdhags """ 
-    # # Create an expander
-    # with st.expander("Business Insights"):
-    #     st.write(a)
-
-    # Display information based on the selected fruit
-    # if selected_fruit == 'Apple':
-    #     st.write("Apples are a great source of fiber and vitamin C.")
-    #     st.image("apple.jpg", caption="An apple", use_column_width=True)
-    # elif selected_fruit == 'Banana':
-    #     st.write("Bananas are rich in potassium and provide quick energy.")
-    #     st.image("banana.jpg", caption="A banana", use_column_width=True)
-    # elif selected_fruit == 'Orange':
-    #     st.write("Oranges are known for their high vitamin C content.")
-    #     st.image("orange.jpg", caption="An orange", use_column_width=True)
 if __name__ == "__main__":
     main()
