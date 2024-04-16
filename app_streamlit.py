@@ -10,7 +10,7 @@ import pickle as pkl
 import pandas as pd
 
 def predict_cluster(X_data : pd.DataFrame):
-    with open("C:\src\Project\Final_Project\customer_classification_model.pkl","rb") as f:
+    with open("customer_classification_model.pkl","rb") as f:
         model = pkl.load(f)
         return model.predict(X_data)
 
