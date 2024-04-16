@@ -8,7 +8,7 @@
 import streamlit as st
 import pickle as pkl
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
+
 def predict_cluster(X_data : pd.DataFrame):
     with open("C:\src\Project\Final_Project\customer_classification_model.pkl","rb") as f:
         model = pkl.load(f)
