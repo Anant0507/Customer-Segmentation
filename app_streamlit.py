@@ -8,7 +8,6 @@
 import streamlit as st
 import pickle as pkl
 import pandas as pd
-from streamlit_card import card
 from sklearn.preprocessing import StandardScaler
 def predict_cluster(X_data : pd.DataFrame):
     with open("C:\src\Project\Final_Project\customer_classification_model.pkl","rb") as f:
