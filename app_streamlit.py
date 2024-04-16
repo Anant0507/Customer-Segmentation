@@ -46,84 +46,118 @@ def input_fields():
 
     X_data = pd.DataFrame(data,columns=["Is_Parent","Income","Teenhome","Kidhome","Age","Family_Member_Count","Spent"])
     
-    st.session_state["Input_Data"] = X_data
-    st.button('Submit', on_click=set_page, args=["Display Data"])  
-        
-
-def show_result():
-        st.title("Result")
-        if "Input_Data" in st.session_state:
-            insights = {
+    uploaded_file = st.file_uploader("Add File", type=["xlsx", "csv", "tsv"])
+    if uploaded_file is not None:
+        st.session_state["uploaded_file"] = uploaded_file
+        st.button('Submit', on_click=set_page, args=["File Data"])  
+    else:
+        st.session_state["Input_Data"] = X_data
+        st.button('Submit', on_click=set_page, args=["Display Data"])  
+    
+def get_insights():
+    insights = {
                 0:["Insight 1 for Class 0","Insight 2 for class 0"],
                 1:["Insight 1 for Class 1","Insight 2 for class 1"],
                 2:["Insight 1 for Class 2","Insight 2 for class 2"],
                 3:["Insight 1 for Class 3","Insight 2 for class 3"],
             }
+            
+    return insights
+def show_result():
+        st.markdown("""
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Sedan:ital@0;1&display=swap')
+            </style>
+        """,unsafe_allow_html=True)
+        st.title("Result")
+        if "Input_Data" in st.session_state:
+            # insights = {
+            #     0:["Insight 1 for Class 0","Insight 2 for class 0"],
+            #     1:["Insight 1 for Class 1","Insight 2 for class 1"],
+            #     2:["Insight 1 for Class 2","Insight 2 for class 2"],
+            #     3:["Insight 1 for Class 3","Insight 2 for class 3"],
+            # }
             X_data = st.session_state["Input_Data"]
-            st.write(X_data)
+            st.dataframe(X_data)
 
-            # scaler = StandardScaler()
-            # Scaled_X_data = pd.DataFrame(scaler.fit_transform(X_data),columns = X_data.columns)
-
-            # label = predict_cluster(X_data=Scaled_X_data)
             label = predict_cluster(X_data=X_data)
             label_no = label[0].item()
-            st.write(f"Cluster:{label[0]}")
-            insights_new = insights[label_no]
-            # with st.expander("Business Insights",expanded=True):
-            #     st.write(insights_new[0])
-            # res = card(
-            #     title="Personality Analysis",
-            #     text=insights[label[0].item()],
-            #     styles={
-            #         "card": {
-            #             "width": "100%",
-            #             "height": "100px",
-            #             "box-shadow": "0 0 10px rgba(0,0,0,0.5)",
-            #         },
-            #         "text": {
-            #             "font-family": "serif",
-            #         }
-            #     }
-            # )
-            # col1,col2 = st.columns(2)
-            # col1.header("Personality Analysis")
-            # col1.text(insights[label[0].item()])
-            # col2.header("Personality Analysis")
-            # col2.text(insights[label[0].item()])
-            # expander1 = st.expander("Expander 1", style="width:100%; padding:10px; border-radius:10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);")
-            # expander2 = st.expander("Expander 2", style="width:100%; padding:10px; border-radius:10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);")
+            st.header(f"Cluster: {label[0]}")
+            #Check pls!!!
+            insights_new = get_insights()[label_no]
 
-            # Place them side by side
-            col1, col2 = st.columns(2)
-
-            # Put expanders in the columns
-            # with col1:
-            #     with st.expander("#### Business Insights",expanded=True):
-            #         st.markdown(insights_new[0])
-            # with col2:
-            #     with st.expander("#### Future Course of Action",expanded=True):
-            #         st.markdown(insights_new[0])
-            with st.expander("""<style></style>""",expanded=True):
-                st.markdown("""
-                    <style>
-                        .headerText{
-                            color:#CC2828;
+            st.markdown("""
+                <style>
+                        h4{
+                            color:#FF534D;
                             font-weight:bold;
+                            font-family: Montserrat, sans-serif;
+                            font-optical-sizing: auto;
                         }
                     </style>
-                    <p class="headerText">Hello Insights</p>
+            """,unsafe_allow_html=True)
+            with st.expander("#### Business Insights",expanded=True):
+                st.markdown("""
+                    <ul>
+                        <li>Hello Insights</li>
+                    </ul>
                 """,unsafe_allow_html=True)
             with st.expander("#### Future Course of Action",expanded=True):
                 st.markdown(insights_new[0])
-                # expander1.write("Content of Expander 1 goes here")
-
-            # with col2:
-                # expander2.write("Content of Expander 2 goes here")
         else:
             st.write("Data not received")
         
         st.button('Home', on_click=set_page, args=["Input Data"])
+
+def show_file_result():
+    st.title("Result")
+    uploaded_file = st.session_state["uploaded_file"]
+    df = pd.read_csv(uploaded_file)
+    X_data = df[["Is_Parent","Income","Teenhome","Kidhome","Age","Family_Member_Count","Spent"]]
+    label = predict_cluster(X_data=X_data)
+    new_df = X_data
+    new_df["Clusters"] = label
+    st.dataframe(new_df)
+    with st.expander("#### Cluster Analysis",expanded=False):
+        st.markdown("""
+                    <h4>Cluster 0:</h4>
+                    <ul>
+                    <li>Definitely a parent</li>
+                    <li>At max have 4 and at least 2 members in family</li>
+                    <li>Single parents are a subset of this group</li>
+                    <li>Most of them have a teenager at home</li>
+                    <li>They are relatively older</li>
+                    </ul>
+
+                    <h4>Cluster 1:</h4>
+                    <ul>
+                    <li>Definitely not a parent</li>
+                    <li>At max there are only 2 members in the family</li>
+                    <li>A slight majority of couples over singles</li>
+                    <li>Span all ages</li>
+                    <li>A high income group</li>
+                    </ul>
+                    
+                    <h4>Cluster 2:</h4>
+                    <ul>
+                    <li>The majority of these people are parents</li>
+                    <li>At the max there are 3 members in the family</li>
+                    <li>They majorly have one kid (and not teenagers, typically)</li>
+                    <li>They are relatively younger</li>
+                    </ul>
+
+                    <ul>
+                    <h4>Cluster 3:</h4>
+                    <li>They are definitely a parent</li>
+                    <li>At max have 5 and at least 2 members in the family</li>
+                    <li>Majority have a teenager at home</li>
+                    <li>They are relatively older</li>
+                    <li>A low-income group</li>
+                    </ul>
+                """,unsafe_allow_html=True)
+        
+            
+    st.button('Home', on_click=set_page, args=["Input Data"])
 
 def main():
     if 'page' not in st.session_state:
@@ -133,5 +167,7 @@ def main():
         input_fields()
     elif st.session_state.page == 'Display Data':
         show_result ()
+    elif st.session_state.page == 'File Data':
+        show_file_result()
 if __name__ == "__main__":
     main()
