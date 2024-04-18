@@ -20,7 +20,8 @@ st.markdown("""
                     </style>
             """,unsafe_allow_html=True)
 def predict_cluster(X_data : pd.DataFrame):
-    with open("customer_classification_model.pkl","rb") as f:
+    with open("C:\src\Project\Final_Project\customer_classification_model.pkl","rb") as f:
+    # with open(r"C:\Users\Dell\Downloads\random_forest_model.pkl","rb") as f:
         model = pkl.load(f)
         return model.predict(X_data)
 
@@ -51,10 +52,14 @@ def input_fields():
 
     is_parent = 0 if is_parent == "No" else 1
 
-    data = [[is_parent,income,teenhome,kidhome,age,family_size,spent]]
+    df = [[is_parent,income,teenhome,kidhome,age,family_size,spent]]
 
-    X_data = pd.DataFrame(data,columns=["Is_Parent","Income","Teenhome","Kidhome","Age","Family_Member_Count","Spent"])
-    
+    X_data = pd.DataFrame(df,columns=["Is_Parent","Income","Teenhome","Kidhome","Age","Family_Member_Count","Spent"])
+    st.write("<div style='display: flex; align-items: center;'>"
+         "<hr style='flex: 1; border: none; height: 5px; background: linear-gradient(to right, #FF534D, #FFF47D);'>"
+         "<span style='padding: 0 10px; color: #FFF47D;font-size:35px;'>OR</span>"
+         "<hr style='flex: 1; border: none;height: 5px; background: linear-gradient(to left, #FF534D, #FFF47D);'>"
+         "</div>", unsafe_allow_html=True)
     uploaded_file = st.file_uploader("Add File", type=["xlsx", "csv", "tsv"])
     if uploaded_file is not None:
         st.session_state["uploaded_file"] = uploaded_file
@@ -80,12 +85,7 @@ def show_result():
         """,unsafe_allow_html=True)
         st.title("Result")
         if "Input_Data" in st.session_state:
-            # insights = {
-            #     0:["Insight 1 for Class 0","Insight 2 for class 0"],
-            #     1:["Insight 1 for Class 1","Insight 2 for class 1"],
-            #     2:["Insight 1 for Class 2","Insight 2 for class 2"],
-            #     3:["Insight 1 for Class 3","Insight 2 for class 3"],
-            # }
+            
             X_data = st.session_state["Input_Data"]
             st.dataframe(X_data)
 
