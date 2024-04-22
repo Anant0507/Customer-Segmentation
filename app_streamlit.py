@@ -60,7 +60,7 @@ def input_fields():
          "<span style='padding: 0 10px; color: #FFF47D;font-size:35px;'>OR</span>"
          "<hr style='flex: 1; border: none;height: 5px; background: linear-gradient(to left, #FF534D, #FFF47D);'>"
          "</div>", unsafe_allow_html=True)
-    uploaded_file = st.file_uploader("Add File", type=["xlsx", "csv", "tsv"])
+    uploaded_file = st.file_uploader("Add File", type=["csv"])
     if uploaded_file is not None:
         st.session_state["uploaded_file"] = uploaded_file
         st.button('Submit', on_click=set_page, args=["File Data"])  
