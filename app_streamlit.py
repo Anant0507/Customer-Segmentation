@@ -70,10 +70,36 @@ def input_fields():
     
 def get_insights():
     insights = {
-                0:["Insight 1 for Class 0","Insight 2 for class 0"],
-                1:["Insight 1 for Class 1","Insight 2 for class 1"],
-                2:["Insight 1 for Class 2","Insight 2 for class 2"],
-                3:["Insight 1 for Class 3","Insight 2 for class 3"],
+                0:["""
+                    <ul>
+                    <li>Definitely a parent</li>
+                    <li>At max have 4 and at least 2 members in family</li>
+                    <li>Single parents are a subset of this group</li>
+                    <li>Most of them have a teenager at home</li>
+                    <li>They are relatively older</li>
+                    </ul>""","Insight 2 for class 0"],
+                1:["""
+                    <ul>
+                    <li>Definitely not a parent</li>
+                    <li>At max there are only 2 members in the family</li>
+                    <li>A slight majority of couples over singles</li>
+                    <li>Span all ages</li>
+                    <li>A high income group</li>
+                    </ul>""","Insight 2 for class 1"],
+                2:["""
+                    <ul>
+                    <li>The majority of these people are parents</li>
+                    <li>At the max there are 3 members in the family</li>
+                    <li>They majorly have one kid (and not teenagers, typically)</li>
+                    <li>They are relatively younger</li>
+                    </ul>""","Insight 2 for class 2"],
+                3:["""<ul>
+                    <li>They are definitely a parent</li>
+                    <li>At max have 5 and at least 2 members in the family</li>
+                    <li>Majority have a teenager at home</li>
+                    <li>They are relatively older</li>
+                    <li>A low-income group</li>
+                    </ul>""","Insight 2 for class 3"],
             }
             
     return insights
@@ -106,13 +132,9 @@ def show_result():
                     </style>
             """,unsafe_allow_html=True)
             with st.expander("#### Business Insights",expanded=True):
-                st.markdown("""
-                    <ul>
-                        <li>Hello Insights</li>
-                    </ul>
-                """,unsafe_allow_html=True)
+                st.markdown(insights_new[0],unsafe_allow_html=True)
             with st.expander("#### Future Course of Action",expanded=True):
-                st.markdown(insights_new[0])
+                st.markdown(insights_new[1],unsafe_allow_html=True)
         else:
             st.write("Data not received")
         
@@ -155,8 +177,8 @@ def show_file_result():
                     <li>They are relatively younger</li>
                     </ul>
 
-                    <ul>
                     <h4>Cluster 3:</h4>
+                    <ul>
                     <li>They are definitely a parent</li>
                     <li>At max have 5 and at least 2 members in the family</li>
                     <li>Majority have a teenager at home</li>
