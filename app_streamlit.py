@@ -77,7 +77,13 @@ def get_insights():
                     <li>Single parents are a subset of this group</li>
                     <li>Most of them have a teenager at home</li>
                     <li>They are relatively older</li>
-                    </ul>""","Insight 2 for class 0"],
+                    </ul>""","""
+                    <ul>
+                    <li>Targeted Promotions: Offer exclusive deals to incentivize repeat purchases.</li>
+                    <li>Personalized Recommendations: Provide product recommendations based on past purchases.</li>
+                    <li>VIP Programs: Introduce a VIP program for high spenders to encourage continued engagement.</li>
+                    </ul>
+                """],
                 1:["""
                     <ul>
                     <li>Definitely not a parent</li>
@@ -85,21 +91,39 @@ def get_insights():
                     <li>A slight majority of couples over singles</li>
                     <li>Span all ages</li>
                     <li>A high income group</li>
-                    </ul>""","Insight 2 for class 1"],
+                    </ul>""","""
+                    <ul>
+                    <li>In-Store Events: Organize events to drive foot traffic.</li>
+                    <li>Cross-Selling Opportunities: Promote different product categories within the store.</li>
+                    <li>Loyalty Points: Implement a points system for in-store purchases.</li>
+                    </ul>
+                """],
                 2:["""
                     <ul>
                     <li>The majority of these people are parents</li>
                     <li>At the max there are 3 members in the family</li>
                     <li>They majorly have one kid (and not teenagers, typically)</li>
                     <li>They are relatively younger</li>
-                    </ul>""","Insight 2 for class 2"],
+                    </ul>""","""
+                    <ul>
+                    <li>Catalog Optimization: Enhance the catalog layout to highlight popular products.</li>
+                    <li>Limited-Time Offers: Create urgency with time-sensitive offers.</li>
+                    <li>Referral Programs: Encourage existing customers to refer new ones.</li>
+                    </ul>
+                """],
                 3:["""<ul>
                     <li>They are definitely a parent</li>
                     <li>At max have 5 and at least 2 members in the family</li>
                     <li>Majority have a teenager at home</li>
                     <li>They are relatively older</li>
                     <li>A low-income group</li>
-                    </ul>""","Insight 2 for class 3"],
+                    </ul>""","""
+                    <ul>
+                    <li>Reactivation Campaigns: Target inactive customers with personalized offers.</li>
+                    <li>Survey Feedback: Collect and analyze customer feedback to improve services.</li>
+                    <li>Welcome Offers: Provide special offers to new customers to build loyalty.</li>
+                    </ul>
+                """],
             }
             
     return insights
@@ -186,7 +210,36 @@ def show_file_result():
                     <li>A low-income group</li>
                     </ul>
                 """,unsafe_allow_html=True)
-        
+    with st.expander("#### Marketing Strategy", expanded=False):
+            st.markdown("""
+                <h4>Cluster 0 - High Engagement, Wide Income Range:</h4>
+                <ul>
+                <li>Targeted Promotions: Offer exclusive deals to incentivize repeat purchases.</li>
+                <li>Personalized Recommendations: Provide product recommendations based on past purchases.</li>
+                <li>VIP Programs: Introduce a VIP program for high spenders to encourage continued engagement.</li>
+                </ul>
+
+                <h4>Cluster 1 - Moderate Purchases, Store Focus:</h4>
+                <ul>
+                <li>In-Store Events: Organize events to drive foot traffic.</li>
+                <li>Cross-Selling Opportunities: Promote different product categories within the store.</li>
+                <li>Loyalty Points: Implement a points system for in-store purchases.</li>
+                </ul>
+
+                <h4>Cluster 2 - Lower Purchases, Catalog Preference:</h4>
+                <ul>
+                <li>Catalog Optimization: Enhance the catalog layout to highlight popular products.</li>
+                <li>Limited-Time Offers: Create urgency with time-sensitive offers.</li>
+                <li>Referral Programs: Encourage existing customers to refer new ones.</li>
+                </ul>
+
+                <h4>Cluster 3 - Lower Engagement, Opportunity for Growth:</h4>
+                <ul>
+                <li>Reactivation Campaigns: Target inactive customers with personalized offers.</li>
+                <li>Survey Feedback: Collect and analyze customer feedback to improve services.</li>
+                <li>Welcome Offers: Provide special offers to new customers to build loyalty.</li>
+                </ul>
+            """, unsafe_allow_html=True)
             
     st.button('Home', on_click=set_page, args=["Input Data"])
 
